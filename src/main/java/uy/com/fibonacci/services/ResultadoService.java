@@ -36,63 +36,85 @@ public class ResultadoService  {
 
     public ResultadoModel getFibonacciValue(Long n) throws Exception {
         try{
-            Optional<ResultadoModel> resultadoExistente = resultadoRepository.findById(n);
+            Optional<ResultadoModel> resultadoExistente = resultadoRepository.findByPosition(n);
         if(resultadoExistente.isPresent()){
-            resultadoExistente.get().setId(n);
             //indicadoresService.aumentarIndicador(resultadoExistente.get());
             return resultadoExistente.get();
         }else{
             //Calcular el valor de fibonacci porque no esta en la base
-            Long fibonacciValue= calcularFibonacci(n);
-            //Persistimos
-            ResultadoModel resultadoNuevo = new ResultadoModel();
-            resultadoNuevo.setFibonacci_value(fibonacciValue);
-            resultadoNuevo.setId(n);
-            resultadoNuevo= resultadoRepository.save(resultadoNuevo);
-            //indicadoresService.aumentarIndicador(resultadoNuevo);
-            return resultadoNuevo;
+            Optional<ResultadoModel> resultadoNuevo = calcularFibonacci(n);
+            return resultadoNuevo.get();
         }
     }catch(Exception ex){
         logger.error("Error al calcular el nro fibonacci, " + ex.getMessage() );
     }
     return null;
     }
-        private Long calcularFibonacci(Long n) throws Exception {
+
+    private Optional<ResultadoModel> calcularFibonacci(Long n) throws Exception {
         if(n<=0){
             throw new Exception("El indice debe ser un numero positivo.");
         }
-
         //Si existe el valor lo devuelvo
-        Optional<ResultadoModel> cachedResult = resultadoRepository.findById(n);
+        Optional<ResultadoModel> cachedResult = resultadoRepository.findByPosition(n);
         if(cachedResult.isPresent()){
-            return cachedResult.get().getFibonacci_value();
+            return cachedResult;
         }
 
         if(n==1){
-            return 1L;
+            return persistirResultado(n, 1L, 1);
         }
         if(n==2){
-            return 2L;
+            return persistirResultado(n,2L,2);
         }
+
+        //Valores por defecto, posiciones iniciales
         Long fib = 2L;
         Long prevFib=1L;
         int start = 3;
 
-        //Encontramos hasta donde hay almacenado
-        Optional<ResultadoModel> lastCachedResult = resultadoRepository.findTopByPosition();
-        if(lastCachedResult.isPresent()){
-            prevFib = lastCachedResult.get().getFibonacci_value() - fib;
-            fib = lastCachedResult.get().getFibonacci_value();
-            start = lastCachedResult.get().getId().intValue()+1;
+       // Encuentra el máximo almacenado por debajo de `n`
+    Optional<ResultadoModel> lastCachedResult = resultadoRepository.findMaxPositionWithLimit(n);
+    if (lastCachedResult.isPresent()) {
+        ResultadoModel lastCached = lastCachedResult.get();
+        // Corregir cálculo de prevFib
+        if (lastCached.getPosition() > 1) {
+            Optional<ResultadoModel> previous = resultadoRepository.findByPosition(lastCached.getPosition() - 1);
+            if (previous.isPresent()) {
+                prevFib = previous.get().getFibonacci_value();
+            } else {
+                prevFib = lastCached.getFibonacci_value() - fib;  // Asegúrate de que este cálculo es válido
+            }
         }
-
-        //Continuamos la secuencia
-        for(int i=start;i<=n;i++){
-            Long newFib = fib+prevFib; //Calcular F(n+1) = F(n) + F(n-1)
-            prevFib = fib; //F(n-1 se convierte en  F(n-2 en la siguiente iteración))
-            fib=newFib; // F(n) se convierte en F(n-1 en la siguiente iteración)
-        }
-        return fib;
+        fib = lastCached.getFibonacci_value();
+        start = lastCached.getPosition().intValue() + 1; // Siguiente posición a calcular
     }
 
+    Optional<ResultadoModel> retorno = Optional.empty();
+    // Continuamos la secuencia
+    for (int i = start; i <= n; i++) {
+        Long newFib = fib + prevFib; // Calcular F(n+1) = F(n) + F(n-1)
+        logger.info("Iteración i=" + i + " // " + "prevFib=" + prevFib + " // " + "fib=" + fib + " // " + "newFib: " + newFib + " // n=" + n);
+        prevFib = fib; 
+        fib = newFib;
+        // Persistimos valor intermedio actualizado
+        retorno = persistirResultado(i+0L, fib, i);
+    }
+    logger.info("-----------------------------------------------------------------------------");
+    return retorno;
+    }
+    private Optional<ResultadoModel> persistirResultado(Long n, Long fib, int position){
+            /*Persistimos valor intermedio*/
+            Optional<ResultadoModel> resultadoExistente = resultadoRepository.findByPosition(position+0L);
+            if(!resultadoExistente.isPresent()){
+                ResultadoModel resultadoNuevo = new ResultadoModel();
+                resultadoNuevo.setFibonacci_value(fib);
+                resultadoNuevo.setPosition(position+0L);
+                resultadoNuevo= resultadoRepository.save(resultadoNuevo);
+                //indicadoresService.aumentarIndicador(resultadoNuevo);
+                return Optional.of(resultadoNuevo);
+            }else{
+            return resultadoExistente;
+        }
+}
 }

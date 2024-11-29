@@ -12,7 +12,11 @@ import jakarta.persistence.Table;
 @Table(name="fib_resultados")
 public class ResultadoModel {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "position", nullable = false, unique = true)
+    private Long position;
 
     @Column(name = "fibonacci_value", nullable = false)
     private Long fibonacci_value;
@@ -32,4 +36,13 @@ public class ResultadoModel {
     public void setFibonacci_value(Long fibonacci_value) {
         this.fibonacci_value = fibonacci_value;
     }
+
+    public Long getPosition() {
+        return position;
+    }
+
+    public void setPosition(Long position) {
+        this.position = position;
+    }
+     
 }
