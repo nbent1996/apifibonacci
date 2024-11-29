@@ -10,6 +10,9 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +26,9 @@ public class IndicadoresService {
     @Autowired
     IndicadoresRepository indicadoresRepository;
     
-    public ArrayList<IndicadoresModel> obtenerIndicadores(){
-        return (ArrayList<IndicadoresModel>) indicadoresRepository.findAll();
+    public Page<IndicadoresModel> obtenerIndicadores(){
+        Pageable pageable =  PageRequest.of(0,50);
+        return (Page<IndicadoresModel>)indicadoresRepository.findAll();
     }
 
     public ArrayList<IndicadoresModel> TopRequestByOrderDesc(){

@@ -1,13 +1,11 @@
 package uy.com.fibonacci.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import uy.com.fibonacci.models.ResultadoModel;
 import uy.com.fibonacci.services.ResultadoService;
-
-import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/resultado")
@@ -16,7 +14,7 @@ public class ResultadoController {
     ResultadoService resultadoService;
 
     @GetMapping("/obtenerTodos")
-    public ArrayList<ResultadoModel> obtenerResultados(){
+    public Page<ResultadoModel> obtenerResultados(){
         return resultadoService.obtenerResultados();
     }
 

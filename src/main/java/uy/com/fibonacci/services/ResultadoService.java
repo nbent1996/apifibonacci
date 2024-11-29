@@ -3,9 +3,14 @@ package uy.com.fibonacci.services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import uy.com.fibonacci.models.IndicadoresModel;
 import uy.com.fibonacci.models.ResultadoModel;
 import uy.com.fibonacci.repositories.ResultadoRepository;
 
@@ -23,8 +28,9 @@ public class ResultadoService  {
     @Autowired
     IndicadoresService indicadoresService;
 
-    public ArrayList<ResultadoModel> obtenerResultados(){
-        return (ArrayList<ResultadoModel>) resultadoRepository.findAll();
+    public Page<ResultadoModel> obtenerResultados(){
+        Pageable pageable = PageRequest.of(0,50);
+        return (Page<ResultadoModel>) resultadoRepository.findAll();
     }
 
     public void limpiarCache(){
