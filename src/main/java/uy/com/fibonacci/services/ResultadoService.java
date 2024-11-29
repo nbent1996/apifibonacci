@@ -38,7 +38,7 @@ public class ResultadoService  {
         try{
             Optional<ResultadoModel> resultadoExistente = resultadoRepository.findByPosition(n);
         if(resultadoExistente.isPresent()){
-            //indicadoresService.aumentarIndicador(resultadoExistente.get());
+            indicadoresService.aumentarIndicador(resultadoExistente.get());
             return resultadoExistente.get();
         }else{
             //Calcular el valor de fibonacci porque no esta en la base
@@ -103,7 +103,7 @@ public class ResultadoService  {
     logger.info("-----------------------------------------------------------------------------");
     return retorno;
     }
-    private Optional<ResultadoModel> persistirResultado(Long n, Long fib, int position){
+    private Optional<ResultadoModel> persistirResultado(Long n, Long fib, int position) throws Exception{
             /*Persistimos valor intermedio*/
             Optional<ResultadoModel> resultadoExistente = resultadoRepository.findByPosition(position+0L);
             if(!resultadoExistente.isPresent()){
@@ -111,7 +111,7 @@ public class ResultadoService  {
                 resultadoNuevo.setFibonacci_value(fib);
                 resultadoNuevo.setPosition(position+0L);
                 resultadoNuevo= resultadoRepository.save(resultadoNuevo);
-                //indicadoresService.aumentarIndicador(resultadoNuevo);
+                indicadoresService.aumentarIndicador(resultadoNuevo);
                 return Optional.of(resultadoNuevo);
             }else{
             return resultadoExistente;

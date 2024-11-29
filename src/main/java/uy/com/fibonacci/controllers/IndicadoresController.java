@@ -1,7 +1,6 @@
 package uy.com.fibonacci.controllers;
 
 import uy.com.fibonacci.models.IndicadoresModel;
-import uy.com.fibonacci.models.ResultadoModel;
 import uy.com.fibonacci.services.IndicadoresService;
 import java.util.ArrayList;
 import java.util.Optional;

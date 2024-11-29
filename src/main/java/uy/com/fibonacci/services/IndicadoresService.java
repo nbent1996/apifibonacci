@@ -42,12 +42,13 @@ public class IndicadoresService {
         if(indicadorExistente.isPresent()){
             indicadorExistente.get().setRequestCount(indicadorExistente.get().getRequestCount()+1L);
             indicadoresRepository.save(indicadorExistente.get());
+            return indicadorExistente.get();
         }else{
             IndicadoresModel ind = new IndicadoresModel();
             ind.setResultado(resultado);
             ind.setRequestCount(1L);
             return indicadoresRepository.save(ind);
         }
-        throw new Exception("Hubo un error al aumentar el indicador.");
+    
     }
 }

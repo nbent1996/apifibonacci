@@ -14,7 +14,7 @@ import org.springframework.data.repository.query.Param;
 @Repository
 public interface IndicadoresRepository extends CrudRepository<IndicadoresModel, Long> {
 
-    @Query("SELECT i FROM IndicadoresModel i ORDER BY i.requestCount DESC")
+    @Query("SELECT i FROM IndicadoresModel i ORDER BY i.requestCount DESC LIMIT 5")
     ArrayList<IndicadoresModel> findTopRequestByOrderDesc();
 
     @Query("SELECT i FROM IndicadoresModel i WHERE i.resultado.id = :resultadoId")
