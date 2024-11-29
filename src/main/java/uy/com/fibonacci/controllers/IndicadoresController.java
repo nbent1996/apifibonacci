@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,8 +24,8 @@ public class IndicadoresController {
     }
 
     @GetMapping("/getIndicador/{id}")
-    public Optional<IndicadoresModel> getIndicador(@PathVariable Long n) throws Exception{
-        return this.indicadoresService.obtenerIndicadorPorIdResultado(n);
+    public ResponseEntity<IndicadoresModel> getIndicador(@PathVariable Long id) throws Exception{
+        return this.indicadoresService.obtenerIndicadorPorPositionResultado(id);
     }
 
     @GetMapping("/mejoresIndicadores")

@@ -1,6 +1,7 @@
 package uy.com.fibonacci.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import uy.com.fibonacci.models.ResultadoModel;
@@ -25,7 +26,7 @@ public class ResultadoController {
     }
 
     @GetMapping("/getFibonacci/{n}")
-    public ResultadoModel getFibonacci(@PathVariable Long n) throws Exception {
+    public ResponseEntity<ResultadoModel> getFibonacci(@PathVariable Long n) throws Exception {
         return resultadoService.getFibonacciValue(n);
     }
     
