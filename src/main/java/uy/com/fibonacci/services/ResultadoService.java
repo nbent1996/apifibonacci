@@ -43,6 +43,9 @@ public class ResultadoService  {
     }
 
     public ResponseEntity<ResultadoModel> getFibonacciValue(Long n) throws Exception {
+        if(n<=0){
+            throw new Exception("La posicion a calcular debe ser un numero positivo.");
+        }
         try{
             Optional<ResultadoModel> resultadoExistente = resultadoRepository.findByPosition(n);
         if(resultadoExistente.isPresent()){
@@ -51,11 +54,10 @@ public class ResultadoService  {
         }else{
             //Calcular el valor de fibonacci porque no esta en la base
             Optional<ResultadoModel> resultadoNuevo = calcularFibonacci(n);
-            if(resultadoNuevo==null){
-                ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            if(!resultadoNuevo.isPresent()){
+                return ResponseEntity.internalServerError().build();
             }
-            return resultadoNuevo.map(ResponseEntity::ok)
-                                 .orElseGet(() -> ResponseEntity.noContent().build());
+            return ResponseEntity.ok(resultadoNuevo.get());
         }
     }catch(Exception ex){
         logger.error("Error al calcular el nro fibonacci, " + ex.getMessage() );
@@ -64,7 +66,7 @@ public class ResultadoService  {
 
     }
 
-    private Optional<ResultadoModel> calcularFibonacci(Long n) throws Exception {
+    public Optional<ResultadoModel> calcularFibonacci(Long n) throws Exception {
         if(n<=0){
             throw new Exception("El indice debe ser un numero positivo.");
         }
@@ -116,7 +118,7 @@ public class ResultadoService  {
     logger.info("-----------------------------------------------------------------------------");
     return retorno;
     }
-    private Optional<ResultadoModel> persistirResultado(Long n, Long fib, int position) throws Exception{
+    public Optional<ResultadoModel> persistirResultado(Long n, Long fib, int position) throws Exception{
             /*Persistimos valor intermedio*/
             Optional<ResultadoModel> resultadoExistente = resultadoRepository.findByPosition(position+0L);
             if(!resultadoExistente.isPresent()){

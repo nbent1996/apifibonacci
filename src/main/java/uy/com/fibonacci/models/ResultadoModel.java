@@ -44,5 +44,19 @@ public class ResultadoModel {
     public void setPosition(Long position) {
         this.position = position;
     }
+
+    public ResultadoModel(Long position, Long fibonacci_value) {
+        this.position = position;
+        this.fibonacci_value = fibonacci_value;
+    }
+
+    public ResultadoModel(Long id, Long position, Long fibonacci_value) {
+        this.id = id;
+        this.position = position;
+        this.fibonacci_value = fibonacci_value;
+    }
+
+    public ResultadoModel() {
+    }
      
 }

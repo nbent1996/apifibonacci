@@ -45,4 +45,19 @@ public class IndicadoresModel {
     public void setRequestCount(Long requestCount) {
         this.requestCount = requestCount;
     }
+
+    public IndicadoresModel(Long id, ResultadoModel resultado, Long requestCount) {
+        this.id = id;
+        this.resultado = resultado;
+        this.requestCount = requestCount;
+    }
+
+    public IndicadoresModel(ResultadoModel resultado, Long requestCount) {
+        this.resultado = resultado;
+        this.requestCount = requestCount;
+    }
+
+    public IndicadoresModel() {
+    }
+    
 }
