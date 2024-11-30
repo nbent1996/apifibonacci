@@ -98,11 +98,11 @@ import java.util.Optional;
 <span class="pc bpc" id="L98" title="1 of 2 branches missed.">            if (previous.isPresent()) {</span>
 <span class="fc" id="L99">                prevFib = previous.get().getFibonacci_value();</span>
             } else {
-<span class="nc" id="L101">                prevFib = lastCached.getFibonacci_value() - fib;  // Asegúrate de que este cálculo es válido</span>
+<span class="nc" id="L101">                prevFib = lastCached.getFibonacci_value() - fib; </span>
             }
         }
 <span class="fc" id="L104">        fib = lastCached.getFibonacci_value();</span>
-<span class="fc" id="L105">        start = lastCached.getPosition().intValue() + 1; // Siguiente posición a calcular</span>
+<span class="fc" id="L105">        start = lastCached.getPosition().intValue() + 1; </span>
     }
 
 <span class="fc" id="L108">    Optional&lt;ResultadoModel&gt; retorno = Optional.empty();</span>
