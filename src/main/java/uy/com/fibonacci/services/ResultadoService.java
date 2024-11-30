@@ -98,11 +98,11 @@ public class ResultadoService  {
             if (previous.isPresent()) {
                 prevFib = previous.get().getFibonacci_value();
             } else {
-                prevFib = lastCached.getFibonacci_value() - fib;  // Asegúrate de que este cálculo es válido
+                prevFib = lastCached.getFibonacci_value() - fib; 
             }
         }
         fib = lastCached.getFibonacci_value();
-        start = lastCached.getPosition().intValue() + 1; // Siguiente posición a calcular
+        start = lastCached.getPosition().intValue() + 1; 
     }
 
     Optional<ResultadoModel> retorno = Optional.empty();
