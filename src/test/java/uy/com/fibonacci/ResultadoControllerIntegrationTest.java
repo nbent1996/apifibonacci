@@ -6,6 +6,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -39,10 +40,9 @@ public class ResultadoControllerIntegrationTest {
 
     @Test
     public void testObtenerResultados() throws Exception {
-        Pageable pageable = PageRequest.of(0, 10);
-        Page<ResultadoModel> page = new PageImpl<>(Collections.emptyList(), pageable, 0);
+        ArrayList<ResultadoModel> lista = new ArrayList<>();;
 
-        when(resultadoService.obtenerResultados()).thenReturn(page);
+        when(resultadoService.obtenerResultados()).thenReturn(lista);
 
         mockMvc.perform(get("/resultado/obtenerTodos"))
                 .andExpect(status().isOk());

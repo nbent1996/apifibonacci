@@ -13,7 +13,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -86,12 +88,12 @@ class ResultadoServiceIntegrationTest {
         verify(resultadoRepository, atLeastOnce()).save(any(ResultadoModel.class));
     }
 
- 	@Test
-	public void testObtenerResultados() {
-		Page<ResultadoModel> expectedPage = Mockito.mock(Page.class);
-		Mockito.when(resultadoRepository.findAll()).thenReturn(expectedPage);
-		Page<ResultadoModel> actualPage = resultadoService.obtenerResultados();
-		assertEquals(expectedPage, actualPage);
+	@Test
+	public void testObtenerResultado() {
+		ArrayList<ResultadoModel> expectedList = new ArrayList<>();
+		Mockito.when(resultadoRepository.find50Resultado()).thenReturn(expectedList);
+		List<ResultadoModel> actualList = resultadoService.obtenerResultados();
+		assertEquals(expectedList, actualList);
 	}
     @Test
     public void testCalcularFibonacci_ExistingCache() throws Exception {

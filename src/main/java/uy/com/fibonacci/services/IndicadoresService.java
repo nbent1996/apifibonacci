@@ -26,9 +26,8 @@ public class IndicadoresService {
     @Autowired
     IndicadoresRepository indicadoresRepository;
     
-    public Page<IndicadoresModel> obtenerIndicadores(){
-        Pageable pageable =  PageRequest.of(0,50);
-        return (Page<IndicadoresModel>)indicadoresRepository.findAll();
+    public ArrayList<IndicadoresModel> obtenerIndicadores(){
+        return (ArrayList<IndicadoresModel>)indicadoresRepository.findAll();
     }
 
     public ArrayList<IndicadoresModel> TopRequestByOrderDesc(){

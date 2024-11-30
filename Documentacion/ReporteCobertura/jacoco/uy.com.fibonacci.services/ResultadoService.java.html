@@ -28,108 +28,107 @@ import java.util.Optional;
     @Autowired
     IndicadoresService indicadoresService;
 
-    public Page&lt;ResultadoModel&gt; obtenerResultados(){
-<span class="fc" id="L32">        Pageable pageable = PageRequest.of(0,50);</span>
-<span class="fc" id="L33">        return (Page&lt;ResultadoModel&gt;) resultadoRepository.findAll();</span>
+    public ArrayList&lt;ResultadoModel&gt; obtenerResultados(){
+<span class="fc" id="L32">        return (ArrayList&lt;ResultadoModel&gt;) resultadoRepository.findAll();</span>
     }
 
     public void limpiarCache(){
-<span class="fc" id="L37">        indicadoresService.deleteAll();</span>
-<span class="fc" id="L38">        resultadoRepository.deleteAll();</span>
-<span class="fc" id="L39">    }</span>
+<span class="fc" id="L36">        indicadoresService.deleteAll();</span>
+<span class="fc" id="L37">        resultadoRepository.deleteAll();</span>
+<span class="fc" id="L38">    }</span>
 
     public ResultadoModel guardarResultado(ResultadoModel resultado){
-<span class="nc" id="L42">        return resultadoRepository.save(resultado);</span>
+<span class="nc" id="L41">        return resultadoRepository.save(resultado);</span>
     }
 
     public ResponseEntity&lt;ResultadoModel&gt; getFibonacciValue(Long n) throws Exception {
-<span class="fc bfc" id="L46" title="All 2 branches covered.">        if(n&lt;=0){</span>
-<span class="fc" id="L47">            throw new Exception(&quot;La posicion a calcular debe ser un numero positivo.&quot;);</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">        if(n&lt;=0){</span>
+<span class="fc" id="L46">            throw new Exception(&quot;La posicion a calcular debe ser un numero positivo.&quot;);</span>
         }
         try{
-<span class="fc" id="L50">            Optional&lt;ResultadoModel&gt; resultadoExistente = resultadoRepository.findByPosition(n);</span>
-<span class="fc bfc" id="L51" title="All 2 branches covered.">        if(resultadoExistente.isPresent()){</span>
-<span class="fc" id="L52">            indicadoresService.aumentarIndicador(resultadoExistente.get());</span>
-<span class="fc" id="L53">            return ResponseEntity.ok(resultadoExistente.get());</span>
+<span class="fc" id="L49">            Optional&lt;ResultadoModel&gt; resultadoExistente = resultadoRepository.findByPosition(n);</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">        if(resultadoExistente.isPresent()){</span>
+<span class="fc" id="L51">            indicadoresService.aumentarIndicador(resultadoExistente.get());</span>
+<span class="fc" id="L52">            return ResponseEntity.ok(resultadoExistente.get());</span>
         }else{
             //Calcular el valor de fibonacci porque no esta en la base
-<span class="fc" id="L56">            Optional&lt;ResultadoModel&gt; resultadoNuevo = calcularFibonacci(n);</span>
-<span class="pc bpc" id="L57" title="1 of 2 branches missed.">            if(!resultadoNuevo.isPresent()){</span>
-<span class="nc" id="L58">                return ResponseEntity.internalServerError().build();</span>
+<span class="fc" id="L55">            Optional&lt;ResultadoModel&gt; resultadoNuevo = calcularFibonacci(n);</span>
+<span class="pc bpc" id="L56" title="1 of 2 branches missed.">            if(!resultadoNuevo.isPresent()){</span>
+<span class="nc" id="L57">                return ResponseEntity.internalServerError().build();</span>
             }
-<span class="fc" id="L60">            return ResponseEntity.ok(resultadoNuevo.get());</span>
+<span class="fc" id="L59">            return ResponseEntity.ok(resultadoNuevo.get());</span>
         }
-<span class="fc" id="L62">    }catch(Exception ex){</span>
-<span class="fc" id="L63">        logger.error(&quot;Error al calcular el nro fibonacci, &quot; + ex.getMessage() );</span>
-<span class="fc" id="L64">        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();</span>
+<span class="fc" id="L61">    }catch(Exception ex){</span>
+<span class="fc" id="L62">        logger.error(&quot;Error al calcular el nro fibonacci, &quot; + ex.getMessage() );</span>
+<span class="fc" id="L63">        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();</span>
     }
 
     }
 
     public Optional&lt;ResultadoModel&gt; calcularFibonacci(Long n) throws Exception {
-<span class="pc bpc" id="L70" title="1 of 2 branches missed.">        if(n&lt;=0){</span>
-<span class="nc" id="L71">            throw new Exception(&quot;El indice debe ser un numero positivo.&quot;);</span>
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">        if(n&lt;=0){</span>
+<span class="nc" id="L70">            throw new Exception(&quot;El indice debe ser un numero positivo.&quot;);</span>
         }
         //Si existe el valor lo devuelvo
-<span class="fc" id="L74">        Optional&lt;ResultadoModel&gt; cachedResult = resultadoRepository.findByPosition(n);</span>
-<span class="fc bfc" id="L75" title="All 2 branches covered.">        if(cachedResult.isPresent()){</span>
-<span class="fc" id="L76">            return cachedResult;</span>
+<span class="fc" id="L73">        Optional&lt;ResultadoModel&gt; cachedResult = resultadoRepository.findByPosition(n);</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">        if(cachedResult.isPresent()){</span>
+<span class="fc" id="L75">            return cachedResult;</span>
         }
 
-<span class="pc bpc" id="L79" title="1 of 2 branches missed.">        if(n==1){</span>
-<span class="nc" id="L80">            return persistirResultado(n, 1L, 1);</span>
+<span class="pc bpc" id="L78" title="1 of 2 branches missed.">        if(n==1){</span>
+<span class="nc" id="L79">            return persistirResultado(n, 1L, 1);</span>
         }
-<span class="pc bpc" id="L82" title="1 of 2 branches missed.">        if(n==2){</span>
-<span class="nc" id="L83">            return persistirResultado(n,2L,2);</span>
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">        if(n==2){</span>
+<span class="nc" id="L82">            return persistirResultado(n,2L,2);</span>
         }
 
         //Valores por defecto, posiciones iniciales
-<span class="fc" id="L87">        Long fib = 2L;</span>
-<span class="fc" id="L88">        Long prevFib=1L;</span>
-<span class="fc" id="L89">        int start = 3;</span>
+<span class="fc" id="L86">        Long fib = 2L;</span>
+<span class="fc" id="L87">        Long prevFib=1L;</span>
+<span class="fc" id="L88">        int start = 3;</span>
 
        // Encuentra el máximo almacenado por debajo de `n`
-<span class="fc" id="L92">    Optional&lt;ResultadoModel&gt; lastCachedResult = resultadoRepository.findMaxPositionWithLimit(n);</span>
-<span class="fc bfc" id="L93" title="All 2 branches covered.">    if (lastCachedResult.isPresent()) {</span>
-<span class="fc" id="L94">        ResultadoModel lastCached = lastCachedResult.get();</span>
+<span class="fc" id="L91">    Optional&lt;ResultadoModel&gt; lastCachedResult = resultadoRepository.findMaxPositionWithLimit(n);</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">    if (lastCachedResult.isPresent()) {</span>
+<span class="fc" id="L93">        ResultadoModel lastCached = lastCachedResult.get();</span>
         // Corregir cálculo de prevFib
-<span class="pc bpc" id="L96" title="1 of 2 branches missed.">        if (lastCached.getPosition() &gt; 1) {</span>
-<span class="fc" id="L97">            Optional&lt;ResultadoModel&gt; previous = resultadoRepository.findByPosition(lastCached.getPosition() - 1);</span>
-<span class="pc bpc" id="L98" title="1 of 2 branches missed.">            if (previous.isPresent()) {</span>
-<span class="fc" id="L99">                prevFib = previous.get().getFibonacci_value();</span>
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">        if (lastCached.getPosition() &gt; 1) {</span>
+<span class="fc" id="L96">            Optional&lt;ResultadoModel&gt; previous = resultadoRepository.findByPosition(lastCached.getPosition() - 1);</span>
+<span class="pc bpc" id="L97" title="1 of 2 branches missed.">            if (previous.isPresent()) {</span>
+<span class="fc" id="L98">                prevFib = previous.get().getFibonacci_value();</span>
             } else {
-<span class="nc" id="L101">                prevFib = lastCached.getFibonacci_value() - fib; </span>
+<span class="nc" id="L100">                prevFib = lastCached.getFibonacci_value() - fib; </span>
             }
         }
-<span class="fc" id="L104">        fib = lastCached.getFibonacci_value();</span>
-<span class="fc" id="L105">        start = lastCached.getPosition().intValue() + 1; </span>
+<span class="fc" id="L103">        fib = lastCached.getFibonacci_value();</span>
+<span class="fc" id="L104">        start = lastCached.getPosition().intValue() + 1; </span>
     }
 
-<span class="fc" id="L108">    Optional&lt;ResultadoModel&gt; retorno = Optional.empty();</span>
+<span class="fc" id="L107">    Optional&lt;ResultadoModel&gt; retorno = Optional.empty();</span>
     // Continuamos la secuencia
-<span class="fc bfc" id="L110" title="All 2 branches covered.">    for (int i = start; i &lt;= n; i++) {</span>
-<span class="fc" id="L111">        Long newFib = fib + prevFib; // Calcular F(n+1) = F(n) + F(n-1)</span>
-<span class="fc" id="L112">        logger.info(&quot;Iteracion i=&quot; + i + &quot; // &quot; + &quot;prevFib=&quot; + prevFib + &quot; // &quot; + &quot;fib=&quot; + fib + &quot; // &quot; + &quot;newFib: &quot; + newFib + &quot; // n=&quot; + n);</span>
-<span class="fc" id="L113">        prevFib = fib; </span>
-<span class="fc" id="L114">        fib = newFib;</span>
+<span class="fc bfc" id="L109" title="All 2 branches covered.">    for (int i = start; i &lt;= n; i++) {</span>
+<span class="fc" id="L110">        Long newFib = fib + prevFib; // Calcular F(n+1) = F(n) + F(n-1)</span>
+<span class="fc" id="L111">        logger.info(&quot;Iteracion i=&quot; + i + &quot; // &quot; + &quot;prevFib=&quot; + prevFib + &quot; // &quot; + &quot;fib=&quot; + fib + &quot; // &quot; + &quot;newFib: &quot; + newFib + &quot; // n=&quot; + n);</span>
+<span class="fc" id="L112">        prevFib = fib; </span>
+<span class="fc" id="L113">        fib = newFib;</span>
         // Persistimos valor intermedio actualizado
-<span class="fc" id="L116">        retorno = persistirResultado(i+0L, fib, i);</span>
+<span class="fc" id="L115">        retorno = persistirResultado(i+0L, fib, i);</span>
     }
-<span class="fc" id="L118">    logger.info(&quot;-----------------------------------------------------------------------------&quot;);</span>
-<span class="fc" id="L119">    return retorno;</span>
+<span class="fc" id="L117">    logger.info(&quot;-----------------------------------------------------------------------------&quot;);</span>
+<span class="fc" id="L118">    return retorno;</span>
     }
     public Optional&lt;ResultadoModel&gt; persistirResultado(Long n, Long fib, int position) throws Exception{
             /*Persistimos valor intermedio*/
-<span class="fc" id="L123">            Optional&lt;ResultadoModel&gt; resultadoExistente = resultadoRepository.findByPosition(position+0L);</span>
-<span class="fc bfc" id="L124" title="All 2 branches covered.">            if(!resultadoExistente.isPresent()){</span>
-<span class="fc" id="L125">                ResultadoModel resultadoNuevo = new ResultadoModel();</span>
-<span class="fc" id="L126">                resultadoNuevo.setFibonacci_value(fib);</span>
-<span class="fc" id="L127">                resultadoNuevo.setPosition(position+0L);</span>
-<span class="fc" id="L128">                resultadoNuevo= resultadoRepository.save(resultadoNuevo);</span>
-<span class="fc" id="L129">                indicadoresService.aumentarIndicador(resultadoNuevo);</span>
-<span class="fc" id="L130">                return Optional.of(resultadoNuevo);</span>
+<span class="fc" id="L122">            Optional&lt;ResultadoModel&gt; resultadoExistente = resultadoRepository.findByPosition(position+0L);</span>
+<span class="fc bfc" id="L123" title="All 2 branches covered.">            if(!resultadoExistente.isPresent()){</span>
+<span class="fc" id="L124">                ResultadoModel resultadoNuevo = new ResultadoModel();</span>
+<span class="fc" id="L125">                resultadoNuevo.setFibonacci_value(fib);</span>
+<span class="fc" id="L126">                resultadoNuevo.setPosition(position+0L);</span>
+<span class="fc" id="L127">                resultadoNuevo= resultadoRepository.save(resultadoNuevo);</span>
+<span class="fc" id="L128">                indicadoresService.aumentarIndicador(resultadoNuevo);</span>
+<span class="fc" id="L129">                return Optional.of(resultadoNuevo);</span>
             }else{
-<span class="fc" id="L132">            return resultadoExistente;</span>
+<span class="fc" id="L131">            return resultadoExistente;</span>
         }
 }
 }

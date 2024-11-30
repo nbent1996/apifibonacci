@@ -2,6 +2,7 @@ package uy.com.fibonacci;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 
@@ -9,8 +10,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
+import org.apache.tomcat.util.http.parser.MediaType;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,15 +42,17 @@ public class IndicadoresControllerIntegrationTest {
     private IndicadoresService indicadoresService;
 
     @Test
-    public void testObtenerIndicadores() throws Exception {
-        Pageable pageable = PageRequest.of(0, 50);
-        Page<IndicadoresModel> page = new PageImpl<>(Collections.emptyList(), pageable, 0);
+public void testObtenerIndicadores() throws Exception {
+    // Configurar un ArrayList vacío como respuesta simulada
+    ArrayList<IndicadoresModel> indicadoresList = new ArrayList<>();
 
-        when(indicadoresService.obtenerIndicadores()).thenReturn(page);
+    // Simular el comportamiento del servicio para devolver esta lista
+    when(indicadoresService.obtenerIndicadores()).thenReturn(indicadoresList);
 
-        mockMvc.perform(get("/indicador/obtenerTodos"))
-                .andExpect(status().isOk());
-    }
+    // Realizar la solicitud GET y verificar que la respuesta está bien.
+    mockMvc.perform(get("/indicador/obtenerTodos"))
+            .andExpect(status().isOk());
+}
     @Test
     public void testGetIndicador() throws Exception {
         IndicadoresModel indicadoresModel = new IndicadoresModel();

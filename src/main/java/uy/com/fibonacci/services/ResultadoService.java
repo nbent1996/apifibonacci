@@ -28,9 +28,8 @@ public class ResultadoService  {
     @Autowired
     IndicadoresService indicadoresService;
 
-    public Page<ResultadoModel> obtenerResultados(){
-        Pageable pageable = PageRequest.of(0,50);
-        return (Page<ResultadoModel>) resultadoRepository.findAll();
+    public ArrayList<ResultadoModel> obtenerResultados(){
+        return (ArrayList<ResultadoModel>) resultadoRepository.findAll();
     }
 
     public void limpiarCache(){

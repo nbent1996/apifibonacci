@@ -36,12 +36,12 @@ public class IndicadoresServiceIntegrationTest {
 
 	@Test
 	public void testObtenerIndicadores() {
-		Page<IndicadoresModel> expectedPage = Mockito.mock(Page.class);
-		Mockito.when(indicadoresRepository.findAll()).thenReturn(expectedPage);
-		Page<IndicadoresModel> actualPage = indicadoresService.obtenerIndicadores();
-		assertEquals(expectedPage, actualPage);
+		
+		List<IndicadoresModel> expectedList = new ArrayList<>();
+		Mockito.when(indicadoresRepository.findAll()).thenReturn(expectedList);
+		List<IndicadoresModel> actualList = indicadoresService.obtenerIndicadores();
+		assertEquals(expectedList, actualList);
 	}
- 
     @Test
     public void testGuardarIndicador() {
         IndicadoresModel newIndicador = new IndicadoresModel();

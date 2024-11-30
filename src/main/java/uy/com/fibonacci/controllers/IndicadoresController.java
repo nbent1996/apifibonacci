@@ -20,7 +20,7 @@ public class IndicadoresController {
     IndicadoresService indicadoresService;
 
     @GetMapping("/obtenerTodos")
-    public Page<IndicadoresModel> obtenerIndicadores(){
+    public ArrayList<IndicadoresModel> obtenerIndicadores(){
         return indicadoresService.obtenerIndicadores();
     }
 

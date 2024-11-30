@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
     IndicadoresService indicadoresService;
 
     @GetMapping(&quot;/obtenerTodos&quot;)
-    public Page&lt;IndicadoresModel&gt; obtenerIndicadores(){
+    public ArrayList&lt;IndicadoresModel&gt; obtenerIndicadores(){
 <span class="fc" id="L24">        return indicadoresService.obtenerIndicadores();</span>
     }
 

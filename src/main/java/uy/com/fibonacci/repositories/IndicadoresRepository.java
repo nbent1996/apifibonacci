@@ -19,4 +19,7 @@ public interface IndicadoresRepository extends CrudRepository<IndicadoresModel, 
 
     @Query("SELECT i FROM IndicadoresModel i WHERE i.resultado.position = :resultadoPosition")
     Optional<IndicadoresModel> getIndicadorByResultadoPosition(@Param("resultadoPosition")Long resultadoPosition);
+
+    @Query(value = "SELECT * FROM IndicadoresModel ORDER BY id ASC LIMIT 50", nativeQuery = true)
+    ArrayList<IndicadoresModel> find50Indicadores();
 }

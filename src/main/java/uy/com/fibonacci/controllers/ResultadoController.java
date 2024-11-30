@@ -1,5 +1,7 @@
 package uy.com.fibonacci.controllers;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +16,7 @@ public class ResultadoController {
     ResultadoService resultadoService;
 
     @GetMapping("/obtenerTodos")
-    public Page<ResultadoModel> obtenerResultados(){
+    public ArrayList<ResultadoModel> obtenerResultados(){
         return resultadoService.obtenerResultados();
     }
 
