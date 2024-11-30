@@ -1,0 +1,198 @@
+{
+	"info": {
+		"_postman_id": "4b3fc64a-2102-42b8-b7c0-165ad51e4e32",
+		"name": "API Fibonacci",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2474211"
+	},
+	"item": [
+		{
+			"name": "Resultados",
+			"item": [
+				{
+					"name": "obtenerTodos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true,
+						"strictSSL": false
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://fibonacciapi-443016.rj.r.appspot.com/resultado/obtenerTodos",
+							"protocol": "https",
+							"host": [
+								"fibonacciapi-443016",
+								"rj",
+								"r",
+								"appspot",
+								"com"
+							],
+							"path": [
+								"resultado",
+								"obtenerTodos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getFibonacci",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true,
+						"strictSSL": false
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://fibonacciapi-443016.rj.r.appspot.com/resultado/getFibonacci/8",
+							"protocol": "https",
+							"host": [
+								"fibonacciapi-443016",
+								"rj",
+								"r",
+								"appspot",
+								"com"
+							],
+							"path": [
+								"resultado",
+								"getFibonacci",
+								"8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "limpiarCache",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://fibonacciapi-443016.rj.r.appspot.com/resultado/limpiarCache",
+							"protocol": "https",
+							"host": [
+								"fibonacciapi-443016",
+								"rj",
+								"r",
+								"appspot",
+								"com"
+							],
+							"path": [
+								"resultado",
+								"limpiarCache"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Indicadores",
+			"item": [
+				{
+					"name": "obtenerTodos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://fibonacciapi-443016.rj.r.appspot.com/indicador/obtenerTodos",
+							"protocol": "https",
+							"host": [
+								"fibonacciapi-443016",
+								"rj",
+								"r",
+								"appspot",
+								"com"
+							],
+							"path": [
+								"indicador",
+								"obtenerTodos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getIndicador",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://fibonacciapi-443016.rj.r.appspot.com/indicador/getIndicador/3",
+							"protocol": "https",
+							"host": [
+								"fibonacciapi-443016",
+								"rj",
+								"r",
+								"appspot",
+								"com"
+							],
+							"path": [
+								"indicador",
+								"getIndicador",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "mejoresIndicadores",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://fibonacciapi-443016.rj.r.appspot.com/indicador/mejoresIndicadores",
+							"protocol": "https",
+							"host": [
+								"fibonacciapi-443016",
+								"rj",
+								"r",
+								"appspot",
+								"com"
+							],
+							"path": [
+								"indicador",
+								"mejoresIndicadores"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
