@@ -28,9 +28,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 
 import uy.com.fibonacci.controllers.IndicadoresController;
+import uy.com.fibonacci.dto.IndicadoresDTO;
 import uy.com.fibonacci.models.IndicadoresModel;
 import uy.com.fibonacci.services.IndicadoresService;
-
 
 @WebMvcTest(IndicadoresController.class)
 public class IndicadoresControllerIntegrationTest {
@@ -42,23 +42,29 @@ public class IndicadoresControllerIntegrationTest {
     private IndicadoresService indicadoresService;
 
     @Test
-public void testObtenerIndicadores() throws Exception {
-    // Configurar un ArrayList vacío como respuesta simulada
-    ArrayList<IndicadoresModel> indicadoresList = new ArrayList<>();
+    public void testObtenerIndicadores() throws Exception {
+        ArrayList<IndicadoresDTO> indicadoresList = new ArrayList<>();
 
-    // Simular el comportamiento del servicio para devolver esta lista
-    when(indicadoresService.obtenerIndicadores()).thenReturn(indicadoresList);
+        when(indicadoresService.obtenerIndicadores()).thenReturn(indicadoresList);
 
-    // Realizar la solicitud GET y verificar que la respuesta está bien.
-    mockMvc.perform(get("/indicador/obtenerTodos"))
-            .andExpect(status().isOk());
-}
+        mockMvc.perform(get("/indicador/obtenerTodos"))
+                .andExpect(status().isOk());
+    }
+
     @Test
     public void testGetIndicador() throws Exception {
-        IndicadoresModel indicadoresModel = new IndicadoresModel();
-        ResponseEntity<IndicadoresModel> responseEntity = ResponseEntity.of(Optional.of(indicadoresModel));
+        IndicadoresDTO indicadoresDTO = new IndicadoresDTO();
+        indicadoresDTO.setId(1L);
+        indicadoresDTO.setResultadoId(1L);
+        indicadoresDTO.setNumeroConsultado(1L);
+        indicadoresDTO.setValorResultado(1L);
+        indicadoresDTO.setRequestCount(3L);
 
-        when(indicadoresService.obtenerIndicadorPorPositionResultado(anyLong())).thenReturn(responseEntity);
+        ResponseEntity<IndicadoresDTO> responseEntity =
+                ResponseEntity.of(Optional.of(indicadoresDTO));
+
+        when(indicadoresService.obtenerIndicadorPorPositionResultado(anyLong()))
+                .thenReturn(responseEntity);
 
         mockMvc.perform(get("/indicador/getIndicador/1"))
                 .andExpect(status().isOk());
@@ -66,9 +72,9 @@ public void testObtenerIndicadores() throws Exception {
 
     @Test
     public void testTopRequestByOrderDesc() throws Exception {
-        ArrayList<IndicadoresModel> indicadoresModels = new ArrayList<>();
+        ArrayList<IndicadoresDTO> indicadoresDTOList = new ArrayList<>();
 
-        when(indicadoresService.TopRequestByOrderDesc()).thenReturn(indicadoresModels);
+        when(indicadoresService.TopRequestByOrderDesc()).thenReturn(indicadoresDTOList);
 
         mockMvc.perform(get("/indicador/mejoresIndicadores"))
                 .andExpect(status().isOk());

@@ -1,8 +1,10 @@
 package uy.com.fibonacci.controllers;
 
+import uy.com.fibonacci.dto.IndicadoresDTO;
 import uy.com.fibonacci.models.IndicadoresModel;
 import uy.com.fibonacci.services.IndicadoresService;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,17 +22,17 @@ public class IndicadoresController {
     IndicadoresService indicadoresService;
 
     @GetMapping("/obtenerTodos")
-    public ArrayList<IndicadoresModel> obtenerIndicadores(){
+    public List<IndicadoresDTO> obtenerIndicadores(){
         return indicadoresService.obtenerIndicadores();
     }
 
     @GetMapping("/getIndicador/{id}")
-    public ResponseEntity<IndicadoresModel> getIndicador(@PathVariable Long id) throws Exception{
+    public ResponseEntity<IndicadoresDTO> getIndicador(@PathVariable Long id) throws Exception{
         return this.indicadoresService.obtenerIndicadorPorPositionResultado(id);
     }
 
     @GetMapping("/mejoresIndicadores")
-    public ArrayList<IndicadoresModel> TopRequestByOrderDesc(){
+    public List<IndicadoresDTO> TopRequestByOrderDesc(){
         return indicadoresService.TopRequestByOrderDesc();
     }
 }

@@ -24,10 +24,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import uy.com.fibonacci.dto.ResultadosDTO;
 import uy.com.fibonacci.services.ResultadoService;
 import uy.com.fibonacci.controllers.ResultadoController;
 import uy.com.fibonacci.models.ResultadoModel;
-
 
 @WebMvcTest(ResultadoController.class)
 public class ResultadoControllerIntegrationTest {
@@ -40,7 +40,7 @@ public class ResultadoControllerIntegrationTest {
 
     @Test
     public void testObtenerResultados() throws Exception {
-        ArrayList<ResultadoModel> lista = new ArrayList<>();;
+        ArrayList<ResultadosDTO> lista = new ArrayList<>();
 
         when(resultadoService.obtenerResultados()).thenReturn(lista);
 
@@ -50,7 +50,6 @@ public class ResultadoControllerIntegrationTest {
 
     @Test
     public void testLimpiarCache() throws Exception {
-        // Aquí se simula el efecto secundario sin una expectativa en el tipo de respuesta, ya que el método es void
         doNothing().when(resultadoService).limpiarCache();
 
         mockMvc.perform(get("/resultado/limpiarCache"))
@@ -59,8 +58,12 @@ public class ResultadoControllerIntegrationTest {
 
     @Test
     public void testGetFibonacci() throws Exception {
-        ResultadoModel resultadoModel = new ResultadoModel();
-        ResponseEntity<ResultadoModel> responseEntity = ResponseEntity.of(Optional.of(resultadoModel));
+        ResultadosDTO resultadoDTO = new ResultadosDTO();
+        resultadoDTO.setId(1L);
+        resultadoDTO.setPosition(5L);
+        resultadoDTO.setFibonacciValue(8L);
+
+        ResponseEntity<ResultadosDTO> responseEntity = ResponseEntity.of(Optional.of(resultadoDTO));
 
         when(resultadoService.getFibonacciValue(anyLong())).thenReturn(responseEntity);
 

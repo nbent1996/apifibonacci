@@ -1,11 +1,13 @@
 package uy.com.fibonacci.controllers;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import uy.com.fibonacci.dto.ResultadosDTO;
 import uy.com.fibonacci.models.ResultadoModel;
 import uy.com.fibonacci.services.ResultadoService;
 
@@ -16,7 +18,7 @@ public class ResultadoController {
     ResultadoService resultadoService;
 
     @GetMapping("/obtenerTodos")
-    public ArrayList<ResultadoModel> obtenerResultados(){
+    public List<ResultadosDTO> obtenerResultados(){
         return resultadoService.obtenerResultados();
     }
 
@@ -26,7 +28,7 @@ public class ResultadoController {
     }
 
     @GetMapping("/getFibonacci/{n}")
-    public ResponseEntity<ResultadoModel> getFibonacci(@PathVariable Long n) throws Exception {
+    public ResponseEntity<ResultadosDTO> getFibonacci(@PathVariable Long n) throws Exception {
         return resultadoService.getFibonacciValue(n);
     }
     

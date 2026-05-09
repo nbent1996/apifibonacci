@@ -10,11 +10,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import uy.com.fibonacci.dto.IndicadoresDTO;
+import uy.com.fibonacci.dto.ResultadosDTO;
 import uy.com.fibonacci.models.IndicadoresModel;
 import uy.com.fibonacci.models.ResultadoModel;
 import uy.com.fibonacci.repositories.ResultadoRepository;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,8 +31,8 @@ public class ResultadoService  {
     @Autowired
     IndicadoresService indicadoresService;
 
-    public ArrayList<ResultadoModel> obtenerResultados(){
-        return (ArrayList<ResultadoModel>) resultadoRepository.findAll();
+    public List<ResultadosDTO> obtenerResultados(){
+        return mapToResultadoDTOList(resultadoRepository.findAll());
     }
 
     public void limpiarCache(){
@@ -41,45 +44,58 @@ public class ResultadoService  {
         return resultadoRepository.save(resultado);
     }
 
-    public ResponseEntity<ResultadoModel> getFibonacciValue(Long n) throws Exception {
-        if(n<=0){
-            throw new Exception("La posicion a calcular debe ser un numero positivo.");
+    public ResponseEntity<ResultadosDTO> getFibonacciValue(Long n) {
+
+        if (n == null || n <= 0) {
+            return ResponseEntity.badRequest().build();
         }
-        try{
+
+        try {
             Optional<ResultadoModel> resultadoExistente = resultadoRepository.findByPosition(n);
-        if(resultadoExistente.isPresent()){
-            indicadoresService.aumentarIndicador(resultadoExistente.get());
-            return ResponseEntity.ok(resultadoExistente.get());
-        }else{
-            //Calcular el valor de fibonacci porque no esta en la base
-            Optional<ResultadoModel> resultadoNuevo = calcularFibonacci(n);
-            if(!resultadoNuevo.isPresent()){
+
+            if (resultadoExistente.isPresent()) {
+                ResultadoModel resultado = resultadoExistente.get();
+
+                indicadoresService.aumentarIndicador(resultado);
+
+                ResultadosDTO dto = mapToResultadoDTO(resultado);
+
+                return ResponseEntity.ok(dto);
+            }
+
+            Optional<ResultadosDTO> resultadoNuevo = calcularFibonacci(n);
+
+            if (resultadoNuevo.isEmpty()) {
                 return ResponseEntity.internalServerError().build();
             }
+
             return ResponseEntity.ok(resultadoNuevo.get());
+
+        } catch (Exception ex) {
+            logger.error("Error al calcular el número Fibonacci para la posición {}", n, ex);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-    }catch(Exception ex){
-        logger.error("Error al calcular el nro fibonacci, " + ex.getMessage() );
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
-    }
-
-    public Optional<ResultadoModel> calcularFibonacci(Long n) throws Exception {
+    public Optional<ResultadosDTO> calcularFibonacci(Long n) throws Exception {
         if(n<=0){
             throw new Exception("El indice debe ser un numero positivo.");
         }
         //Si existe el valor lo devuelvo
-        Optional<ResultadoModel> cachedResult = resultadoRepository.findByPosition(n);
-        if(cachedResult.isPresent()){
+        Optional<ResultadosDTO> cachedResult = resultadoRepository.findByPosition(n)
+                .map(this::mapToResultadoDTO);
+        if (cachedResult.isPresent()) {
             return cachedResult;
         }
 
-        if(n==1){
-            return persistirResultado(n, 1L, 1);
+        if (n == 1) {
+            return persistirResultado(n, 1L, 1)
+                    .map(this::mapToResultadoDTO);
         }
-        if(n==2){
-            return persistirResultado(n,2L,2);
+
+        if (n == 2) {
+            return persistirResultado(n, 2L, 2)
+                    .map(this::mapToResultadoDTO);
         }
 
         //Valores por defecto, posiciones iniciales
@@ -115,7 +131,7 @@ public class ResultadoService  {
         retorno = persistirResultado(i+0L, fib, i);
     }
     logger.info("-----------------------------------------------------------------------------");
-    return retorno;
+        return retorno.map(this::mapToResultadoDTO);
     }
     public Optional<ResultadoModel> persistirResultado(Long n, Long fib, int position) throws Exception{
             /*Persistimos valor intermedio*/
@@ -131,4 +147,24 @@ public class ResultadoService  {
             return resultadoExistente;
         }
 }
+    private List<ResultadosDTO> mapToResultadoDTOList(Iterable<ResultadoModel> iterable) {
+        List<ResultadosDTO> retorno = new ArrayList<>();
+
+        for (ResultadoModel item : iterable) {
+            retorno.add(mapToResultadoDTO(item));
+        }
+
+        return retorno;
+    }
+    private ResultadosDTO mapToResultadoDTO(ResultadoModel model) {
+        if (model == null) {
+            return null;
+        }
+
+        return new ResultadosDTO(
+                model.getId(),
+                model.getPosition(),
+                model.getFibonacci_value()
+        );
+    }
 }
